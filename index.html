@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>节点配置转换工具</title>
+    <link rel="icon" sizes="32x32" href="https://lsky.coisini.us.kg/i/5DmH7sOuGQ/696f201498363.gif">
+
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #ffffff;
+            --surface-alt: #f8f9fc;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --primary-light: #60a5fa;
+            --focus-ring: rgba(59, 130, 246, 0.2);
+            --success-text: #166534;
+            --error-text: #991b1b;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            background-image: url(https://lsky.coisini.us.kg/i/OQpJFM3nbu/696f9a616352b.jpg);
+            background-repeat: no-repeat;
+            background-position: right;
+            background-size: contain;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 1.5rem 1.25rem 2rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+            letter-spacing: -0.025em;
+        }
+
+        .card {
+            border-radius: 1rem;
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            background: hsla(0, 0%, 100%, .5) !important;
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        textarea, input[type="number"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            background: hsla(0, 0%, 100%, .5) !important;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 220px;
+            resize: vertical;
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--focus-ring);
+            background: white;
+        }
+
+        .btn {
+            padding: 0.75rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        /* info 简化为纯文字 */
+        #info {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            min-height: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        #info.success {
+            color: var(--success-text);
+            font-weight: 500;
+        }
+
+        #info.error {
+            color: var(--error-text);
+            font-weight: 500;
+        }
+
+        .top-input {
+            margin-bottom: 1.5rem;
+        }
+
+        .label-info-row {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .port-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .port-input-wrapper {
+            margin-bottom: 1.5rem;
+        }
+
+        .port-input-wrapper input {
+            max-width: 240px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+
+        #download {
+            padding: 0.75rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            background: #f56c6c;
+            border-radius: 0.75rem;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        #download:hover {
+            background: #e53e3e;
+            transform: translateY(-1px);
+        }
+
+        .resources {
+            background: #f8fafc;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid #e5e7eb;
+            background: hsla(0, 0%, 100%, .5) !important;
+        }
+
+        .resources strong {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 1.05rem;
+        }
+
+        .resources ul {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .resources a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .resources a:hover {
+            color: var(--primary-hover);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 640px) {
+            h1 { font-size: 2rem; }
+            .container { padding: 2rem 1rem 4rem; }
+            .label-info-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .port-input-wrapper input {
+                max-width: 100%;
+            }
+            .button-group { flex-direction: column; }
+            .btn, #download { width: 100%; max-width: 240px; margin: 0 auto; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>节点配置转换工具</h1>
+
+    <div class="card">
+        <div class="top-input">
+            <label for="inputYAML">输入节点配置信息</label>
+            <textarea id="inputYAML" rows="10" placeholder="在这里输入节点配置信息"></textarea>
+        </div>
+
+        <div class="label-info-row">
+            <div for="startPort" class="port-label">起始端口号</div>
+            <div id="info"></div>
+            
+        </div>
+
+        <div class="label-info-row">
+            <input type="number" class="form-control" id="startPort" value="42001" min="1024" max="65535" />
+        </div>
+
+        <div class="button-group">
+            <button class="btn" id="processButton">生成配置文件</button>
+            <a id="download" style="display:none;">下载 config.yaml</a>
+        </div>
+    </div>
+
+    <div class="resources">
+        <strong>相关资源</strong>
+        <ul>
+            <li><a href="https://github.com/2dust/v2rayN/releases/tag/6.23" target="_blank">v2rayN 代理工具</a></li>
+            <li><a href="https://bulianglin.com/archives/51.html" target="_blank">本地订阅转换工具说明</a></li>
+            <li><a href="https://youtu.be/01F8xUxqmkY" target="_blank">视频教程</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- 依赖 -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.0.0/js-yaml.min.js"></script>
+
+<script>
+$(document).ready(function () {
+    $('#processButton').click(function () {
+        const inputYAML = $('#inputYAML').val().trim();
+        const startPort = parseInt($('#startPort').val()) || 42001;
+        const info = $('#info');
+        const download = $('#download');
+
+        info.removeClass('success error').text('');
+
+        if (!inputYAML) {
+            info.addClass('error').text('请输入配置内容');
+            return;
+        }
+
+        try {
+            const yamlData = jsyaml.load(inputYAML);
+
+            if (!yamlData || !Array.isArray(yamlData.proxies) || yamlData.proxies.length === 0) {
+                throw new Error('未找到有效的 proxies 数组');
+            }
+
+            const numProxies = yamlData.proxies.length;
+
+            const newYAML = {
+                'allow-lan': true,
+                dns: {
+                    enable: true,
+                    'enhanced-mode': 'fake-ip',
+                    'fake-ip-range': '198.18.0.1/16',
+                    'default-nameserver': ['114.114.114.114'],
+                    nameserver: ['https://doh.pub/dns-query']
+                },
+                listeners: [],
+                proxies: yamlData.proxies
+            };
+
+            newYAML.listeners = Array.from({ length: numProxies }, (_, i) => ({
+                name: `mixed${i}`,
+                type: 'mixed',
+                port: startPort + i,
+                proxy: yamlData.proxies[i].name
+            }));
+
+            const newYAMLString = jsyaml.dump(newYAML, { indent: 2, lineWidth: -1 });
+
+            const blob = new Blob([newYAMLString], { type: 'text/yaml;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            download.attr('href', url)
+                     .attr('download', 'config.yaml')
+                     .show();
+
+            info.addClass('success')
+                .text(`已生成 ${numProxies} 个端口 (${startPort} ~ ${startPort + numProxies - 1})`);
+
+        } catch (error) {
+            info.addClass('error')
+                .text('格式错误：' + (error.message || '请检查输入内容'));
+        }
+    });
+});
+</script>
+
+</body>
+</html>
